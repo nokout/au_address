@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from usaddress import tokenFeatures
+from au_address import tokenFeatures
 import unittest
 
 

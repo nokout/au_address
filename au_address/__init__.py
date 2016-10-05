@@ -21,9 +21,9 @@ import probableparsing
 
 LABELS = [
 'address_number',
-'StreetName',
+'street_name',
 'PlaceName',
-'StateName',
+'state_name',
 'ZipCode',
 'AddressNumberPrefix',
 'AddressNumberSuffix',
@@ -32,10 +32,12 @@ LABELS = [
 'StreetNamePreModifier',
 'StreetNamePostType',
 'StreetNamePreType',
-'USPSBoxType',
-'USPSBoxID',
-'USPSBoxGroupType',
-'USPSBoxGroupID',
+'po_box_type',
+'po_box_number',
+# 'USPSBoxType',
+# 'USPSBoxID',
+# 'USPSBoxGroupType',
+# 'USPSBoxGroupID',
 'LandmarkName',
 'CornerOf',
 'IntersectionSeparator',
@@ -51,7 +53,7 @@ LABELS = [
 PARENT_LABEL = 'AddressString'
 GROUP_LABEL = 'AddressCollection'
 
-MODEL_FILE = 'usaddr.crfsuite'
+MODEL_FILE = 'au_addr.crfsuite'
 MODEL_PATH = os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
 
 DIRECTIONS = set(['n', 's', 'e', 'w',
@@ -59,7 +61,7 @@ DIRECTIONS = set(['n', 's', 'e', 'w',
                   'north', 'south', 'east', 'west',
                   'northeast', 'northwest', 'southeast', 'southwest'])
 
-STREET_NAMES = {'bluf', 'paths', 'tunnl', 'valley', 'harbr', 'lodge',
+STREET_TYPES = {'bluf', 'paths', 'tunnl', 'valley', 'harbr', 'lodge',
                 'plz', 'bch', 'msn', 'squ', 'frgs', 'haven', 'drs',
                 'islands', 'frk', 'extensions', 'annx', 'bayoo',
                 'knol', 'hollow', 'cpe', 'psge', 'dvd', 'loops',
@@ -98,7 +100,7 @@ STREET_NAMES = {'bluf', 'paths', 'tunnl', 'valley', 'harbr', 'lodge',
                 'vill', 'crcl', 'iss', 'mtns', 'bend', 'expw',
                 'bluffs', 'prk', 'ft', 'brnch', 'bypas', 'bot',
                 'fields', 'hbrs', 'cent', 'lks', 'prt', 'key', 'cor',
-                'motorway', 'radial', 'jct', 'courts', 'hwy', 'ally',
+                'motorway', 'radial', 'jct', 'courts', 'hwy', 'hgwy', 'ally',
                 'highwy', 'rapid', 'riv', 'pines', 'rdgs', 'cmp',
                 'is', 'xrds', 'brk', 'mills', 'circle', 'strt',
                 'shls', 'ramp', 'viaduct', 'aven', 'harb', 'sq',
@@ -180,14 +182,15 @@ def tag(address_string) :
     for token, label in parse(address_string) :
         if label == 'IntersectionSeparator' :
             intersection = True
-        if 'StreetName' in label and intersection :
+        if 'street_name' in label and intersection :
             label = 'Second' + label
         if label == last_label :
             tagged_address[label].append(token)
         elif label not in tagged_address :
             tagged_address[label] = [token]
         else :
-            raise RepeatedLabelError(address_string, parse(address_string), label)
+            raise Error("TOKEN: {}".format(token))
+            # raise RepeatedLabelError(address_string, parse(address_string), label, token)
 
         last_label = label
 
@@ -201,7 +204,7 @@ def tag(address_string) :
         address_type = 'Street Address'
     elif intersection and 'address_number' not in tagged_address :
         address_type = 'Intersection'
-    elif 'USPSBoxID' in tagged_address :
+    elif 'po_box_number' in tagged_address :
         address_type = 'PO Box'
     else :
         address_type = 'Ambiguous'
@@ -249,7 +252,7 @@ def tokenFeatures(token) :
                                 if bool(re.match('.+[^.\w]', token, flags=re.UNICODE))
                                 else False),
                 'directional' : token_abbrev in DIRECTIONS,
-                'street_name' : token_abbrev in STREET_NAMES,
+                'street_type' : token_abbrev in STREET_TYPES,
                 'has.vowels'  : bool(set(token_abbrev[1:]) & set('aeiou')),
                 }
 
