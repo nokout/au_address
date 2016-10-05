@@ -20,7 +20,7 @@ import probableparsing
 # http://www.urisa.org/advocacy/united-states-thoroughfare-landmark-and-postal-address-data-standard
 
 LABELS = [
-'AddressNumber',
+'address_number',
 'StreetName',
 'PlaceName',
 'StateName',
@@ -56,7 +56,7 @@ MODEL_PATH = os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
 
 DIRECTIONS = set(['n', 's', 'e', 'w',
                   'ne', 'nw', 'se', 'sw',
-                  'north', 'south', 'east', 'west', 
+                  'north', 'south', 'east', 'west',
                   'northeast', 'northwest', 'southeast', 'southwest'])
 
 STREET_NAMES = {'bluf', 'paths', 'tunnl', 'valley', 'harbr', 'lodge',
@@ -181,14 +181,14 @@ def tag(address_string) :
         if label == 'IntersectionSeparator' :
             intersection = True
         if 'StreetName' in label and intersection :
-            label = 'Second' + label 
+            label = 'Second' + label
         if label == last_label :
             tagged_address[label].append(token)
         elif label not in tagged_address :
             tagged_address[label] = [token]
         else :
             raise RepeatedLabelError(address_string, parse(address_string), label)
-            
+
         last_label = label
 
     for token in tagged_address :
@@ -197,9 +197,9 @@ def tag(address_string) :
         tagged_address[token] = component
 
 
-    if 'AddressNumber' in tagged_address and not intersection :
+    if 'address_number' in tagged_address and not intersection :
         address_type = 'Street Address'
-    elif intersection and 'AddressNumber' not in tagged_address :
+    elif intersection and 'address_number' not in tagged_address :
         address_type = 'Intersection'
     elif 'USPSBoxID' in tagged_address :
         address_type = 'PO Box'
@@ -236,7 +236,7 @@ def tokenFeatures(token) :
     token_abbrev = re.sub(r'[.]', u'', token_clean.lower())
     features = {'abbrev' : token_clean[-1] == u'.',
                 'digits' : digits(token_clean),
-                'word' : (token_abbrev 
+                'word' : (token_abbrev
                           if not token_abbrev.isdigit()
                           else False),
                 'trailing.zeros' : (trailingZeros(token_abbrev)
@@ -257,17 +257,17 @@ def tokenFeatures(token) :
     return features
 
 def tokens2features(address):
-    
+
     feature_sequence = [tokenFeatures(address[0])]
     previous_features = feature_sequence[-1].copy()
 
     for token in address[1:] :
-        token_features = tokenFeatures(token) 
+        token_features = tokenFeatures(token)
         current_features = token_features.copy()
 
         feature_sequence[-1]['next'] = current_features
         token_features['previous'] = previous_features
-            
+
         feature_sequence.append(token_features)
 
         previous_features = current_features
@@ -283,9 +283,9 @@ def tokens2features(address):
 
 def digits(token) :
     if token.isdigit() :
-        return 'all_digits' 
+        return 'all_digits'
     elif set(token) & set(string.digits) :
-        return 'some_digits' 
+        return 'some_digits'
     else :
         return 'no_digits'
 
@@ -295,11 +295,9 @@ def trailingZeros(token) :
         return results[0]
     else :
         return ''
-    
-                          
+
+
 
 class RepeatedLabelError(probableparsing.RepeatedLabelError) :
     REPO_URL = 'https://github.com/datamade/usaddress/issues/new'
     DOCS_URL = 'http://usaddress.readthedocs.org/'
-
-
