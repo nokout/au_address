@@ -19,36 +19,51 @@ import probableparsing
 # The address components are based upon the `United States Thoroughfare, Landmark, and Postal Address Data Standard
 # http://www.urisa.org/advocacy/united-states-thoroughfare-landmark-and-postal-address-data-standard
 
+
+# "lot_number"
+# "number_first"
+# "number_last"
+# "street_name"
+# "street_type" **
+# "street_suffix" **
+# "locality_name"
+# "postcode"
+# "state"
+
 LABELS = [
-'address_number',
+'number_first',
+'number_last',
 'street_name',
-'PlaceName',
-'state_name',
+'locality_name',
+'state',
 'postcode',
-'address_number_prefix',
-'address_number_suffix',
-'street_name_direction_pre', 
-'street_name_direction_post',
-'street_name_modifier_pre',
-'street_type_post',
-'street_type_pre',
-'po_box_type',
-'po_box_number',
+# 'address_number_prefix',
+# 'address_number_suffix',
+# 'street_name_direction_pre',
+'street_suffix',
+# 'street_name_modifier_pre',
+'street_type'
+# 'street_type_pre',
+# 'po_box_type',
+# 'po_box_number',
 # 'USPSBoxType',
 # 'USPSBoxID',
 # 'USPSBoxGroupType',
 # 'USPSBoxGroupID',
-'LandmarkName',
-'CornerOf',
-'IntersectionSeparator',
-'OccupancyType',
-'OccupancyIdentifier',
-'SubaddressIdentifier',
-'SubaddressType',
-'Recipient',
-'BuildingName',
-'NotAddress'
+# 'LandmarkName',
+# 'CornerOf',
+# 'IntersectionSeparator',
+# 'OccupancyType',
+# 'OccupancyIdentifier',
+# 'SubaddressIdentifier',
+# 'SubaddressType',
+# 'Recipient',
+# 'BuildingName',
+# 'NotAddress'
 ]
+# "locality_name"
+# "postcode"
+# "state"
 
 PARENT_LABEL = 'AddressString'
 GROUP_LABEL = 'AddressCollection'
@@ -60,6 +75,8 @@ DIRECTIONS = set(['n', 's', 'e', 'w',
                   'ne', 'nw', 'se', 'sw',
                   'north', 'south', 'east', 'west',
                   'northeast', 'northwest', 'southeast', 'southwest'])
+
+SUBDIVISIONS = ('lot', 'block')
 
 STREET_TYPES = {'bluf', 'paths', 'tunnl', 'valley', 'harbr', 'lodge',
                 'plz', 'bch', 'msn', 'squ', 'frgs', 'haven', 'drs',
@@ -200,9 +217,9 @@ def tag(address_string) :
         tagged_address[token] = component
 
 
-    if 'address_number' in tagged_address and not intersection :
+    if 'number_first' in tagged_address and not intersection :
         address_type = 'Street Address'
-    elif intersection and 'address_number' not in tagged_address :
+    elif intersection and 'number_first' not in tagged_address :
         address_type = 'Intersection'
     elif 'po_box_number' in tagged_address :
         address_type = 'PO Box'
@@ -216,7 +233,7 @@ def tokenize(address_string) :
         address_string = str(address_string, encoding='utf-8')
     address_string = re.sub('(&#38;)|(&amp;)', '&', address_string)
     re_tokens = re.compile(r"""
-    \(*\b[^\s,;#&()]+[.,;)\n]*   # ['ab. cd,ef '] -> ['ab.', 'cd,', 'ef']
+    \(*\b[^\s\-,;#&()]+[.,;)\n]*   # ['ab. cd,ef '] -> ['ab.', 'cd,', 'ef']
     |
     [#&]                       # [^'#abc'] -> ['#']
     """,
@@ -234,6 +251,7 @@ def tokenFeatures(token) :
     if token in (u'&', u'#', u'½') :
         token_clean = token
     else :
+        print(token)
         token_clean = re.sub(r'(^[\W]*)|([^.\w]*$)', u'', token, flags=re.UNICODE)
 
     token_abbrev = re.sub(r'[.]', u'', token_clean.lower())
@@ -254,6 +272,7 @@ def tokenFeatures(token) :
                 'directional' : token_abbrev in DIRECTIONS,
                 'street_type' : token_abbrev in STREET_TYPES,
                 'has.vowels'  : bool(set(token_abbrev[1:]) & set('aeiou')),
+                'subdivision' : token_abbrev in SUBDIVISIONS,
                 }
 
 
