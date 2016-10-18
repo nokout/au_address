@@ -1,0 +1,24 @@
+<AddressCollection>
+
+<address_string><subdivision_type>LOT</subdivision_type> <subdivision_number>99</subdivision_number> <street_number>100</street_number> <street_name>GRAND</street_name> <street_type>BOULEVARD</street_type>, <locality_name>SEAFORD</locality_name> <postcode>5169</postcode> <state_code>SA</state_code></address_string>
+<address_string><subdivision_type>lot</subdivision_type> <subdivision_number>7</subdivision_number> <street_number>16</street_number> <street_name>Timor</street_name> <street_type>Street</street_type>, <locality_name>Warrnambool</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><subdivision_type>Lot</subdivision_type> <subdivision_number>A</subdivision_number> <street_number>16</street_number> <street_name>BEAZLEY</street_name> <street_type>CRES</street_type>, <locality_name>CALWELL</locality_name> <postcode>2905</postcode> <state_code>ACT</state_code></address_string>
+<address_string><subdivision_type>Lot</subdivision_type> <subdivision_number>A</subdivision_number> <street_number>16</street_number> <street_name>BEAZLEY</street_name> <street_type>CRES</street_type>, <locality_name>CALWELL</locality_name> <postcode>2905</postcode> <state_code>ACT</state_code></address_string>
+
+<address_string><po_box_type>PO</po_box_type> <po_box_type>Box</po_box_type> <po_box_number>1229</po_box_number>, <locality_name>WARRNAMBOOL</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><po_box_type>PO</po_box_type> <po_box_type>Box</po_box_type> <po_box_number>353</po_box_number> <street_name>FLINDERS</street_name> <street_type>LANE</street_type>, <locality_name>MELBOURNE</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><po_box_type>Care</po_box_type> <po_box_type>PO</po_box_type> <po_box_number>1229</po_box_number>, <locality_name>WARRNAMBOOL</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><po_box_type>Locked</po_box_type> <po_box_type>Bag</po_box_type> <po_box_number>1229</po_box_number>, <locality_name>WARRNAMBOOL</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+
+<address_string><sub_unit_type>Unit</sub_unit_type> <sub_unit_number>29</sub_unit_number> <number_first>45</number_first> <street_name>Timor</street_name> <street_type>ST</street_type>, <locality_name>Warrnambool</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><sub_unit_number>29</sub_unit_number><sub_unit_seperator>/</sub_unit_seperator><number_first>45</number_first> <street_name>Timor</street_name> <street_type>ST</street_type>, <locality_name>Warrnambool</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><sub_unit_number>29</sub_unit_number><sub_unit_seperator>\</sub_unit_seperator><number_first>45</number_first> <street_name>Timor</street_name> <street_type>ST</street_type>, <locality_name>Warrnambool</locality_name> <postcode>3280</postcode> <state_code>VIC</state_code></address_string>
+<address_string><sub_unit_type>Flat</sub_unit_type> <sub_unit_number>7</sub_unit_number> <number_first>10</number_first> <street_name>Smith</street_name> <street_type>Road</street_type>, <locality_name>Colac</locality_name> <postcode>3212</postcode> <state_code>VIC</state_code></address_string> -->
+
+<address_string><sub_unit_type>Suite</sub_unit_type> <sub_unit_number>6</sub_unit_number> <level_type>LVL</level_type> <level_number>2</level_number> <street_number>10</street_number> <street_name>Smith</street_name> <street_type>Road</street_type>, <locality_name>Colac</locality_name> <postcode>3212</postcode> <state_code>VIC</state_code></address_string>
+
+<address_string><institution_name>Deakin</institution_name> <institution_type>Univesity</institution_type> <street_name>Smith</street_name> <street_type>Road</street_type>, <locality_name>Colac</locality_name> <postcode>3212</postcode> <state_code>VIC</state_code></address_string>
+<address_string><institution_type>Univesity</institution_type> of <institution_name>Sydney</institution_name> <street_name>Smith</street_name> <street_type>Road</street_type>, <locality_name>Colac</locality_name> <postcode>3212</postcode> <state_code>VIC</state_code></address_string>
+<address_string><institution_name>Monash</institution_name> <institution_type>Univesity</institution_type> <street_number>10</street_number> <street_name>Smith</street_name> <street_type>Road</street_type>, <locality_name>Colac</locality_name> <postcode>3212</postcode> <state_code>VIC</state_code></address_string>
+
+</AddressCollection>

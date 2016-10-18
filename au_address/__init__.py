@@ -20,16 +20,6 @@ import probableparsing
 # http://www.urisa.org/advocacy/united-states-thoroughfare-landmark-and-postal-address-data-standard
 
 
-# "lot_number"
-# "number_first"
-# "number_last"
-# "street_name"
-# "street_type" **
-# "street_suffix" **
-# "locality_name"
-# "postcode"
-# "state"
-
 LABELS = [
 'number_first',
 'number_last',
@@ -37,6 +27,15 @@ LABELS = [
 'locality_name',
 'state',
 'postcode',
+'sub_unit_type',
+'sub_unit_number',
+'sub_unit_seperator',
+'level_type',
+'level_number',
+'subdivision_type',
+'subdivision_number',
+'institution_type',
+'institution_number',
 # 'address_number_prefix',
 # 'address_number_suffix',
 # 'street_name_direction_pre',
@@ -44,8 +43,8 @@ LABELS = [
 # 'street_name_modifier_pre',
 'street_type'
 # 'street_type_pre',
-# 'po_box_type',
-# 'po_box_number',
+'po_box_type',
+'po_box_number'
 # 'USPSBoxType',
 # 'USPSBoxID',
 # 'USPSBoxGroupType',
@@ -55,15 +54,10 @@ LABELS = [
 # 'IntersectionSeparator',
 # 'OccupancyType',
 # 'OccupancyIdentifier',
-# 'SubaddressIdentifier',
-# 'SubaddressType',
 # 'Recipient',
 # 'BuildingName',
 # 'NotAddress'
 ]
-# "locality_name"
-# "postcode"
-# "state"
 
 PARENT_LABEL = 'AddressString'
 GROUP_LABEL = 'AddressCollection'
@@ -179,8 +173,9 @@ except IOError :
     warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
 
 def parse(address_string) :
-
+    print("Calling Tokenize")
     tokens = tokenize(address_string)
+    print("DEBUG: Tokens: {}".format(tokens))
 
     if not tokens :
         return []
@@ -233,7 +228,7 @@ def tokenize(address_string) :
         address_string = str(address_string, encoding='utf-8')
     address_string = re.sub('(&#38;)|(&amp;)', '&', address_string)
     re_tokens = re.compile(r"""
-    \(*\b[^\s\-,;#&()]+[.,;)\n]*   # ['ab. cd,ef '] -> ['ab.', 'cd,', 'ef']
+    \(*\b[^\s\\,;#&()]+[.,;)\\\n]*   # ['ab. cd,ef '] -> ['ab.', 'cd,', 'ef']
     |
     [#&]                       # [^'#abc'] -> ['#']
     """,
@@ -248,11 +243,12 @@ def tokenize(address_string) :
 
 def tokenFeatures(token) :
 
-    if token in (u'&', u'#', u'½') :
+    if token in (u'&', u'#', u'½', '/', '\\') :
         token_clean = token
     else :
-        print(token)
         token_clean = re.sub(r'(^[\W]*)|([^.\w]*$)', u'', token, flags=re.UNICODE)
+
+    print("token: {} token_clean: {}".format(token, token_clean))
 
     token_abbrev = re.sub(r'[.]', u'', token_clean.lower())
     features = {'abbrev' : token_clean[-1] == u'.',
@@ -272,7 +268,7 @@ def tokenFeatures(token) :
                 'directional' : token_abbrev in DIRECTIONS,
                 'street_type' : token_abbrev in STREET_TYPES,
                 'has.vowels'  : bool(set(token_abbrev[1:]) & set('aeiou')),
-                'subdivision' : token_abbrev in SUBDIVISIONS,
+                'subdivision' : token_abbrev in SUBDIVISIONS
                 }
 
 
